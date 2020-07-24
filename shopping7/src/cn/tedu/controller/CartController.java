@@ -201,7 +201,7 @@ public class CartController {
 		}
     	model.addAttribute("carts", carts);
     	//调用地址业务完成 查询 当前用户存在数据库 address表中已经用过的地址 并且放入  域中
-    	  List<Address> addresses=    addressService.listByUser(user.getId());
+    	//  List<Address> addresses=    addressService.listByUser(user.getId());
 	   return "client/user/buy_now";
    }
 }

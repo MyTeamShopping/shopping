@@ -21,11 +21,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           )
     
     </insert>
+    
+    <select id="load" parameterType="int" resultMap="adminMap">
+      select * from t_admin where admin_id=#{id}
+   </select>
+    
+    <update id="update" parameterType="cn.tedu.model.Admin">
+       update t_admin set admin_username=#{username},admin_password=#{password},admin_nickname=#{nickname},admin_role=#{role} where admin_id=#{id}
+    </update>
+    
+   <delete id="delete" parameterType="int">
+      delete from t_admin where admin_id=#{id};
+   </delete>
+    
     <!-- 管理员登录  -->
        <select id="login" parameterType="String" resultMap="adminMap">
           select * from t_admin where admin_username=#{username}
        
        </select>
+       
        <resultMap type="cn.tedu.model.Admin" id="adminMap">
            <id property="id" column="admin_id"/>
            <result property="username" column="admin_username"/>
@@ -33,6 +47,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
            <result property="nickname" column="admin_nickname"/>
            <result property="role" column="admin_role"/>
        </resultMap>
+       
+    <select id="list" resultMap="adminMap">
+        select * from t_admin;
+    
+    </select>
 
 
 </mapper>

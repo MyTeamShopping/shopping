@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
+import cn.tedu.model.Admin;
 import cn.tedu.model.Category;
 import cn.tedu.model.Img;
 import cn.tedu.model.Product;
 import cn.tedu.service.ICategoryService;
+import cn.tedu.service.IImgService;
 import cn.tedu.service.IproductService;
+import cn.tedu.util.CodeUtil;
 
 @Controller
 @RequestMapping("/product")
@@ -27,6 +30,7 @@ public class ProductController {
 
 	private IproductService productService;
 	  private ICategoryService categoryService;
+	   private IImgService imgService;
 	  //创建IImgService 
 	  @Resource
 	public void setCagegoryService(ICategoryService cagegoryService) {
@@ -35,6 +39,10 @@ public class ProductController {
 	@Resource
 	public void setProductService(IproductService productService) {
 		this.productService = productService;
+	}
+	@Resource
+	public void setImgService(IImgService imgService) {
+		this.imgService = imgService;
 	}
   @RequestMapping(value="/products",method=RequestMethod.GET)
 	public String list(Model model){
@@ -81,12 +89,73 @@ public class ProductController {
 	        		   img.setName(fileName);
 	        		   img.setProduct(product);
 	        		   //保存图片   图片业务层 add()
-	        		   
+	        		   System.out.println(img);
+	        		   imgService.add(img);
 				}
 	        }
 	  
 	  return "redirect:/product/products";
   }
+  
+  @RequestMapping(value="/{id}/delete",method=RequestMethod.DELETE)
+ public String delete(Product product,@PathVariable int id){
+	   imgService.delete(product.getId());
+	   productService.delete(id);
+	   return "redirect:/product/products";
+ }
+  
+  //跳转到修改用户页面
+  @RequestMapping(value="/{id}/update",method=RequestMethod.GET)
+ public String update(@PathVariable int id,Model model){
+      List<Category> categories = categoryService.list();
+      model.addAttribute("categories", categories);
+	       Product product = productService.load(id);
+	       model.addAttribute(product);
+	       return "admin/main/product/update";
+ } 
+  @RequestMapping(value="/update",method=RequestMethod.PUT)
+  public String update(Product product){
+     productService.update(product);
+	   return "redirect:/product/products";
+  }
+  
+  
+  //跳转到商品详情页
+  @RequestMapping(value="/{id}/detail",method=RequestMethod.GET)
+ public String detail(@PathVariable int id,Model model){
+	       Product product = productService.load(id);
+	       model.addAttribute(product);
+	       return "admin/main/product/detail";
+ } 
+  @RequestMapping(value="/detail",method=RequestMethod.POST)
+  public String detail(Product product,Integer cid,MultipartFile files[],HttpServletRequest req){
+	      //获取商品图片上传的位置  
+	        String path = req.getServletContext().getRealPath("/image");
+	      //判断一下  是否选择了文件  
+	        if(files!=null){
+	        	for (MultipartFile file : files) {
+					//获取图片名称  
+	        		   String fileName = file.getOriginalFilename();
+	        		   //创建一个文件   
+	        		   File f=new File(path+"/"+fileName);
+	        		   try {
+						FileUtils.copyInputStreamToFile(file.getInputStream(), f);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+	        		   //创建图片对象     
+	        		   Img img=new Img();
+	        		   img.setName(fileName);
+	        		   img.setProduct(product);
+	        		   //保存图片   图片业务层 add()
+	        		   imgService.add(img);
+				}
+	        }
+	  
+	  return "redirect:/product/products";
+  }
+
+  
   /**
    * 前台页面 显示商品的详细信息的操作   
    * 

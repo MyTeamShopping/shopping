@@ -22,7 +22,6 @@ public interface IbaseDao<T> {
 	 public void delete(int id);
 	 public void update(T t);
 	 public T load(int id);
-	 
 	 public List<T> list();
 	
 }

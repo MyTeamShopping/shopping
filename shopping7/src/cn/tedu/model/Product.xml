@@ -31,8 +31,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         
         )
    </insert>
+   
     <!-- 删除 -->
+   <delete id="delete" parameterType="int">
+      delete from t_product where product_id=#{id};
+   </delete>
+   
     <!-- 修改 -->
+     <update id="update" parameterType="cn.tedu.model.Product">
+       update t_product set product_name=#{name},product_price=#{price},product_sales=#{sales},product_inventory=#{inventory},
+       product_inventory=#{inventory}, product_describe=#{describe}, product_discount=#{discount},product_status=#{status}
+       where product_id=#{id}
+    </update>
+    
+    
     <!--查询一件商品  -->
     <select id="load" parameterType="int" resultMap="productMap">
        <!-- 多表联查 -->
@@ -67,7 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        <result property="price" column="product_price"/>
        <result property="sales" column="product_sales"/>
        <result property="inventory" column="product_inventory"/>
-       <result property="discribe" column="product_discribe"/>
+       <result property="describe" column="product_describe"/>
        <result property="discount" column="product_discount"/>
        <result property="status" column="product_status"/>
        <association property="category" column="category_id" resultMap="categoryMap"></association>

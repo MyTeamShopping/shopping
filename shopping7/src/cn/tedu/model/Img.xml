@@ -4,9 +4,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.tedu.model.Img">
 <!--  删除修改 查询 所有  查询一张-->
+   <delete id="delete" parameterType="int">
+      delete from t_img where product_id=#{product.id};
+   </delete>
 <!-- 添加图片 -->
    <insert id="add" parameterType="cn.tedu.model.Img">
-      insert into t_img(img_name,product_id) values(#{name},#{product_id})
+      insert into t_img(img_name,product_id) values(#{name},#{product.id})
    </insert>
 
 <resultMap type="cn.tedu.model.Img" id="imgMap">
@@ -15,6 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  
 <association property="product" column="product_id" javaType="cn.tedu.model.Product" resultMap="productMap"></association>
 </resultMap>
+
 <resultMap type="cn.tedu.model.Product" id="productMap">
        <id property="id" column="product_id"/>
        <result property="name" column="product_name"/>

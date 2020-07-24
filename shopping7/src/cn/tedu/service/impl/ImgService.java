@@ -25,7 +25,7 @@ public class ImgService implements IImgService {
 	@Override
 	public void delete(int id) {
 		// TODO Auto-generated method stub
-		
+		imgDao.delete(id);
 	}
 
 	@Override

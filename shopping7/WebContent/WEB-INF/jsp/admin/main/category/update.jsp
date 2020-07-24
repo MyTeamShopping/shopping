@@ -23,7 +23,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <input type="hidden" name="id" value="${category.id }">
         <table>
            <tr>
-              <td>l类别名称</td>
+              <td>类别名称</td>
               <td><sf:input path="name" class="in"/></td>
            </tr>
            <tr>

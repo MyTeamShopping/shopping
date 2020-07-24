@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.model.Order">
+   <!--  添加订单的操作   -->
+    <insert id="add" parameterType="cn.tedu.model.Order">
+        insert into
+         t_order 
+         (
+         order_price,order_status,order_isdel,order_date,address_id,user_id)
+          values
+          (
+          #{price},#{status},#{isdel},#{date},#{address},#{user}
+          )
+    
+    </insert>
+    
+    <select id="load" parameterType="int" resultMap="orderMap">
+      select * from t_order where order_id=#{id}
+   </select>
+    
+    <update id="update" parameterType="cn.tedu.model.Order">
+       update t_order set order_price=#{price},order_status=#{status},
+       order_isdel=#{isdel},order_date=#{date},address_id=#{address},user_id=#{user} where order_id=#{id}
+    </update>
+    
+   <delete id="delete" parameterType="int">
+      delete from t_order where order_id=#{id};
+   </delete>
+    
+       
+       <resultMap type="cn.tedu.model.Order" id="orderMap">
+           <id property="id" column="order_id"/>
+           <result property="price" column="order_price"/>
+           <result property="status" column="order_status"/>
+           <result property="isdel" column="order_isdel"/>
+           <result property="date" column="order_date"/>
+           <result property="address" column="address_id"/>
+           <result property="user" column="user_id"/>
+           
+       </resultMap>
+       
+    <select id="list" resultMap="orderMap">
+        select * from t_order;
+    </select>
+
+
+</mapper>

@@ -116,9 +116,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	<h3 id="con"></h3>
     	<h3 class="h1"><span>管理员管理</span></h3>
     	<ul>
-    		<c:if test="${loginAdmin.role eq 1 or loginAdmin.role eq 2 }">
+<%--     		<c:if test="${loginAdmin.role eq 1 or loginAdmin.role eq 2 }"> --%>
     			<li><a href="admin/add" target="con">--用户添加</a></li>
-    		</c:if>
+<%--     		</c:if> --%>
     		<li><a href="admin/users" target="con">--用户列表</a></li>
     	</ul>
     	<h3 class="h2"><span>商品管理</span></h3>
@@ -133,11 +133,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	</ul>
     	<h3 class="h4"><span>订单管理</span></h3>
     	<ul>
+    	<li><a href="order/add" target="con">--订单添加</a></li>
     		<li><a href="order/orders" target="con">--订单列表</a></li>
     	</ul>
     	<h3 class="h5"><span>其他操作</span></h3>
     	<ul>
-    		<li><a href="" target="con">--其他操作</a></li>
+    		<li><a href="others/other" target="con">--其他操作</a></li>
     	</ul>
     </div>
   </body>
