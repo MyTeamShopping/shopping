@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.model.Product">
+    <!-- 添加商品 -->
+   <insert id="add" parameterType="cn.tedu.model.Product">
+      <!--添加数据的时候立即返回主键  -->
+      <selectKey keyProperty="id" resultType="int" order="AFTER">
+            select LAST_INSERT_ID()
+      </selectKey>
+        insert into t_product 
+        (
+        product_name,
+        product_price,
+        product_sales,
+        product_inventory,
+        product_describe,
+        product_discount,
+        product_status,
+        category_id) values 
+        (
+        #{name},
+        #{price},
+        #{sales},
+        #{inventory},
+        #{describe},
+        #{discount},
+        #{status},
+        #{category.id}
+        
+        )
+   </insert>
+    <!-- 删除 -->
+    <!-- 修改 -->
+    <!--查询一件商品  -->
+    <select id="load" parameterType="int" resultMap="productMap">
+       <!-- 多表联查 -->
+          select *  from t_product p,t_category c,t_img i 
+          where p.category_id=c.category_id 
+          and p.product_id=i.product_id 
+          and p.product_id=#{id}
+    
+    </select>
+    <!-- 后台查询所有商品 ：只查 类别和商品 -->
+    <select id="list" resultMap="productMap">
+        select * from t_product p,t_category c 
+        where p.category_id=c.category_id
+    
+    </select>
+    <!-- 前台页面查询所有上架的商品 ：查询的是商品和图片 -->
+    <select id="listAllProduct" resultMap="productMap">
+        select * from t_product p,t_img i 
+        where p.product_status=1 and p.product_id=i.product_id 
+        order by p.product_id desc
+    
+    </select>
+    <!--  修改商品的库存和销量-->
+     <update id="updateSales" parameterType="cn.tedu.model.Product">
+         update t_product set product_sales=#{sales},
+         product_inventory=#{inventory} where product_id=#{id}
+     
+     </update>
+    <resultMap type="cn.tedu.model.Product" id="productMap">
+       <id property="id" column="product_id"/>
+       <result property="name" column="product_name"/>
+       <result property="price" column="product_price"/>
+       <result property="sales" column="product_sales"/>
+       <result property="inventory" column="product_inventory"/>
+       <result property="discribe" column="product_discribe"/>
+       <result property="discount" column="product_discount"/>
+       <result property="status" column="product_status"/>
+       <association property="category" column="category_id" resultMap="categoryMap"></association>
+       <collection property="imgs" ofType="cn.tedu.model.Img">
+           <id property="id" column="img_id"/>
+           <result property="name" column="img_name"/>
+       
+       </collection>
+    
+    </resultMap>
+    <resultMap type="cn.tedu.model.Category" id="categoryMap">
+      <id property="id" column="category_id"/>
+     <result property="name" column="category_name"/>
+     <result property="describe" column="category_describe"/>
+    
+    </resultMap>
+</mapper>

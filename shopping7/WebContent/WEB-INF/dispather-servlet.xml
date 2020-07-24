@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:aop="http://www.springframework.org/schema/aop"
+         xmlns:tx="http://www.springframework.org/schema/tx"
+             xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+          http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+          http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+        
+        
+        <mvc:annotation-driven></mvc:annotation-driven>
+        <context:component-scan base-package="cn.tedu.controller"></context:component-scan>
+        
+        
+          <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+           <property name="prefix" value="/WEB-INF/jsp/"></property>
+           <property name="suffix" value=".jsp"></property>
+        </bean> 
+        
+        <bean  class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+        
+        <props>
+            <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">hello</prop>
+        </props>
+        </property>
+      </bean>
+     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+         <property name="defaultEncoding" value="utf-8"></property>
+          <property name="maxUploadSize" value="10485760"></property>
+    <!-- 设定文件上传时写入内存的最大值，如果小于这个参数不会生成临时文件，默认为10240 -->
+
+     </bean>
+      <!-- 静态文件映射 -->
+         <mvc:resources location="/css/" mapping="/css/**"></mvc:resources>
+         <mvc:resources location="/image/" mapping="/image/**"></mvc:resources>
+         <mvc:resources location="/img/" mapping="/img/**"></mvc:resources>
+         <mvc:resources location="/js/" mapping="/js/**"></mvc:resources>
+        </beans>

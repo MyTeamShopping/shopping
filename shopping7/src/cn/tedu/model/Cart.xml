@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="cn.tedu.model.Cart">
+ <!-- 添加商品到购物车 -->
+   <insert id="add" parameterType="cn.tedu.model.Cart">
+      insert into t_cart (
+      product_quantity,
+      cart_date,
+      product_id,
+      user_id) values (#{quantity},#{date},#{product.id},#{user.id})
+   
+   </insert>
+ <!-- 删除购物车中的一条条目 -->
+   <delete id="delete" parameterType="int">
+      delete from t_cart where cart_id=#{id}
+   </delete>
+   
+   <!--修改购物车中商品的数量  -->
+      <update id="update" parameterType="cn.tedu.model.Cart">
+         update t_cart set product_quantity=#{quantity} where cart_id=#{id}
+      
+      </update>
+      
+  
+      
+      
+      
+   <!-- 查询购物车中的一件商品 -->
+   <select id="load" parameterType="int" resultMap="cartMap">
+       select * from t_cart c,t_product p,t_img i 
+       where cart_id=#{id} 
+       and c.product_id=p.product_id 
+       and p.product_id=i.product_id;
+   
+   </select>
+   <!-- 查询用户在购物车中有没有相同的商品 -->
+   <select id="loadByProduct" parameterType="cn.tedu.model.Cart" resultMap="cartMap">
+      select  * from t_cart where product_id=#{product.id} and user_id=#{user.id}
+   
+   </select>
+   <!--查询购物车中商品的种类数   -->
+    <select id="loadCartSize" parameterType="int" resultType="int">
+       select count(*) from t_cart where user_id=#{id}
+    </select>
+    <!--  用户查询购物车信息  -->
+    <select id="listByUser" parameterType="int" resultMap="cartMap">
+    
+      select * from 
+      t_cart c,
+      t_product p,
+      t_img i 
+      where 
+         c.product_id=p.product_id 
+         and p.product_id=i.product_id 
+         and user_id=#{uid} 
+         order by c.cart_id desc
+          </select>
+   <resultMap type="cn.tedu.model.Cart" id="cartMap">
+      <id property="id" column="cart_id"/>
+      <result property="quantity" column="product_quantity"/>
+      <result property="date" column="cart_date"/>
+      <association property="product" column="product_id" javaType="cn.tedu.model.Product" resultMap="productMap"></association>
+      <association property="user" column="user_id" javaType="cn.tedu.model.User" resultMap="userMap"></association>
+  
+   </resultMap>
+    <resultMap type="cn.tedu.model.Product" id="productMap">
+       <id property="id" column="product_id"/>
+       <result property="name" column="product_name"/>
+       <result property="price" column="product_price"/>
+       <result property="sales" column="product_sales"/>
+       <result property="inventory" column="product_inventory"/>
+       <result property="discribe" column="product_discribe"/>
+       <result property="discount" column="product_discount"/>
+       <result property="status" column="product_status"/>
+    
+       <collection property="imgs" ofType="cn.tedu.model.Img">
+           <id property="id" column="img_id"/>
+           <result property="name" column="img_name"/>
+       
+       </collection>
+    
+    </resultMap>
+   <resultMap type="cn.tedu.model.User" id="userMap">
+     <id property="id" column="user_id"/>
+     <result property="username" column="user_username"/>
+     <result property="password" column="user_password"/>
+     <result property="phone" column="user_phone"/>
+     <result property="email" column="user_email"/>
+     <result property="balance" column="user_balance"/>
+     
+    </resultMap>
+</mapper>
